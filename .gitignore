@@ -1,0 +1,16 @@
+.venv/
+.tools/
+.cache/
+.pytest_cache/
+__pycache__/
+*.pyc
+.DS_Store
+.env
+.env.*
+!.env.example
+out/
+brreg-enheter.csv
+signalpost-universe.jsonl.gz
+entry-companies.jsonl
+smoke-companies.jsonl
+

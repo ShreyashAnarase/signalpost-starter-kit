@@ -1,0 +1,24 @@
+{
+  "seed": "signalpost-coverage-20261012",
+  "population_by_stratum": {
+    "finance_property|5plus_staff|no_registry_web": 1714,
+    "finance_property|5plus_staff|registry_web": 663,
+    "finance_property|small_or_unknown_staff|no_registry_web": 99476,
+    "finance_property|small_or_unknown_staff|registry_web": 4425,
+    "other_sectors|5plus_staff|no_registry_web": 43312,
+    "other_sectors|5plus_staff|registry_web": 14122,
+    "other_sectors|small_or_unknown_staff|no_registry_web": 221710,
+    "other_sectors|small_or_unknown_staff|registry_web": 25638
+  },
+  "excluded_companies": 100,
+  "split_counts": {
+    "development": 24,
+    "holdout": 24
+  },
+  "files_sha256": {
+    "development": "537e8659bc16de3ebf2ee319d153a5df763d43dc4b0fff4232f9f4b9cf676b1c",
+    "holdout": "bc3a4501462b0d38a72d0464c56e43357803c4b71490da8607e3efa77eb6ce4a"
+  },
+  "interpretation": "Equal allocation diagnostic sample, not population-weighted recall. Holdout must remain unused during tuning. Missing employee counts are grouped, never asserted as zero.",
+  "review_required": "For each company record candidate URL, exact/wrong/unresolved label, supporting source URL/hash/span, and reviewer. Unknown is not a true negative. Report coverage and reviewed precision separately by stratum; do not derive an official score."
+}
