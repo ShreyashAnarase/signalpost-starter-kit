@@ -1,5 +1,13 @@
 # Signalpost reference agent
 
+For the current single-command evaluator, installation, runtime inputs and
+credential policy, read [OFFICIAL_RUN.md](OFFICIAL_RUN.md).
+
+The first-entry preparation uses Tavily for candidate discovery. NAV remains
+optional while its consumer request is pending. See
+[the API/cost declaration](docs/submission-apis-and-cost.md) and
+[the current smoke report](docs/submission-smoke-report.md).
+
 Current competition work uses `scripts/run_competition_batch.py` and the
 `signalpost-claims-v2` evidence envelopes. Start with [HANDOFF.md](HANDOFF.md) and
 [the October 12 coverage report](docs/coverage-progress-20261012.md). The legacy

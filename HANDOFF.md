@@ -1,4 +1,310 @@
+## Highest-priority continuation — 15 October 2026: prepare early version 1
+
+User explicitly prefers an early submission; first version +4 revisions (=5total),
+verified against current official contract15Oct. Earlier daily scores stay inmean.
+Prepare first entry now with Tavily + BRREG + company sites; NAV optional/off,
+no LLM. Do not wait for NAV or maximal coverage. No official score is known.
+
+Fresh current-code100 on15Oct:100outputs,14sites,7articles/3companies,0jobs,
+173.707s,1190operations,94Basic queries under verified free allowance (preflight
+Researcher396used/1000, paygo0).448snapshots/3164locators audit. Runtime source
+b98393804c380ae1fbff62f7c4d7a97b42aa631e615f6e70701f4e08adcf5973.
+Public smoke docs updated, static100sampleincluded at signalpost/index.html;
+source raw snapshots not exported. Paid reference $0.752/100; proposedmax8.80/1100.
+Canonical run command now explicitly matches tested crawl/time caps, with only
+local free pricing and smoke query cap differing from declared official limits.
+See docs/version-1-release.md and docs/first-submission-draft.md.
+
+Actual GitHub repository visibility is PRIVATE (verified15Oct). Do not change
+visibility without owner approval. Evaluator read access is a real release issue,
+not a reason to abandon private preparation. Exact candidate SHA and clean
+verification belong in ignored out/first-entry-20261015/release-manifest.json once
+created; email contact and prepared .eml must stay in ignored out/, not Git.
+
+Entrant has SENT NAV consumer application and shared automatic acknowledgment
+15Oct; NAV says replywithin2days. Older 'not sent' notes are historical. NoNAVkey
+configured. No competition email authorized or sent by assistant. Complete candidate
+and clean checks before final access/publication decision. Preserve all priorwork.
+
+---
+
+## Latest continuation — 14 October 2026: real NAV job integration validated
+
+Read `docs/jobs-improvement-20261014.md` and `docs/nav-access-request.md`.
+User asked how to improve jobs0; investigated and fixed real adapter gaps.
+Live NAV uses `ad_content`, not the old `json` fixture shape. NAV employer IDs often
+identify workplaces. Adapter now verifies official BRREG `underenheter/{id}`:
+exact child ID, BEDR, not deleted, direct overordnetEnhet matching an input legal
+company. No corporate group/subsidiary substitution. Job labels registered
+workplace+legal owner, with NAV and BRREG evidence both required by compile_claims.
+Candidate name matching tolerates whole-name workplace suffixes/reordering only;
+publication remains exact-ID verified. New `scripts/build_nav_candidate_cache.py`
+creates a declared bounded hints-only index using permitted NAV_API_TOKEN.
+No automatic production public experiment-token fallback.
+
+334 tests pass. Selected 3-company positive controls (all frozen-universe eligible):
+ASSEMBLIN AS965808752=1job, OCAB AS916326211=2jobs, ADECCO NORGE AS935333156=14jobs.
+**17 live jobs total**, 30 snapshots/51locators audit with zero errors. Real offline
+missing-key refresh removes all17 from display, retains private evidence, is
+idempotent and audits with zeroHTTP. These are selected hiring positives, NOT
+random coverage, a new100 smoke, independent human precision or official score.
+Original100 remains14sites/7articles/0jobs. Holdout not deliberately targeted.
+
+Private `out/jobs-improvement-20261014/positive-control-v3/` is the successful
+control (includes report/envelopes/profiles/package/refresh-check). Earlier control
+attempts failed due to response shape then workplace mismatch; not successes.
+`nav-broader/` has a partial30day candidate index:60kchange entries/8354hints,
+no candidate-name matches in the existing100+24development inputs. No absence
+inference. Public rotating experiment token was memory-only, never persisted.
+No Tavily queries or paid API calls in this work. NAV API free; compute etc unpriced.
+
+Prepared unsent NAV consumer application at `docs/nav-access-request.md`. NAV
+requires written terms acceptance plus contactemail/phone/person, which remain
+user fields. No email/acceptance sent. Optional user_provided NAV_API_TOKEN
+requirement saved in draft to pam-stilling-feed.nav.no only; draft save is not
+key readiness/publication. After receiving key, enter securely, review/save and
+publish. Do not add a required missing key or block core/Tavily workflow.
+Tavily remains chosen; Builderr access question still held peruser.
+Strategy sources_v9_live_nav_ad_content_and_candidates. Finalcontrol fingerprint
+b98393804c380ae1fbff62f7c4d7a97b42aa631e615f6e70701f4e08adcf5973.
+Earlier cleanclone325tests predates changes; finalpublishedcommit still needscheck.
+No mainrepo commit/push/deployment/submission. Current-code offline100 re-export passes audit, retaining14sites/0jobs with
+zeroHTTP; no new100acquisition. Public machine-readable jobs proof is
+`docs/jobs-validation-report.json`. Older continuation notes below
+are historical. Preserve all earlier work.
+
+---
+
+## Latest continuation — 14 October 2026: fresh 14-site smoke and chosen Tavily configuration
+
+Read `docs/submission-smoke-report.md` / `.json` and
+`docs/submission-apis-and-cost.md`. User clarified that chosen APIs should be
+declared, and asked to hold the access question while improving. Tavily stays in
+the intended configuration; do not remove search or block on outreach. No personal
+key is embedded; credential delivery follows forthcoming official instructions.
+No LLM is currently used and NAV is optional, with no stable production credential.
+
+Implemented Norwegian definite register label + English registration label,
+strict adjacent legal-notice paragraphs (complete legal name, sole labelled ID,
+registered street+postal match, narrow DOM locator), deeper contact/legal links,
+and XML declaration handling after charset decoding without changing source bytes.
+Strategy `sources_v8_legal_notices_and_xml_html`. Four new tests; **325 pass**.
+Fresh same-input live100: **14 verified sites** (previous12 retained + AUR STUDIO AS
+928022641 and HARD'N HEAVY RECORDS AS 919579269), ten descriptions, 24 outbound
+company-declared profiles across nine companies, seven dated company-authored
+articles across three companies, zero jobs. 100/100 envelopes, 172.623-second
+whole evaluator, 1,171 operations, complete telemetry, no unfinished inputs.
+Package audits 448 snapshots/3,164 locators with zero errors. Private artifacts
+`out/coverage-next-20261014/smoke-100/`; local viewer under `public/signalpost/`.
+
+94 Basic queries under observed free allowance: preflight Researcher usage303/
+limit1000, paygo0; immediate postflight still303 (lagged, not invoice-reconciled).
+No paid calls authorized/performed. Paid reference estimate $0.752/100,
+$7.52/1000, $8.272/1100, proposed max1100queries/$8.80 (not an assumed official
+budget). Both draft and OFFICIAL_RUN now specify chosen Tavily configuration.
+
+Fresh pinned LOCAL verification clone commit e9561f0faeb4377245a61b4d65d193c1f054802c
+started empty of venv/tools/out, ran only declared setup, passed325tests+refresh.
+Its real registry-only evaluator emits1,511/1,511 synthetic inputs in8.828s with
+search flags present and zeroHTTP: structural only, not live scale. Runtime
+source fingerprint matches live100: 89070a9256eb80e83bda31505bca06d4cf30785aca5c45d9b6b61e2f161c0e1f.
+This local hash is NOT a published submission hash. Main repo/remote unchanged;
+all earlier user work preserved. Original holdout untouched. No email, push,
+main-repo commit, public deployment or official submission. Final published-commit
+check, contact and final-budget configuration remain release steps. Jobs and wider
+external discovery remain the highest coverage gaps. Earlier notes are historical.
+
+---
+
+## Current continuation — 14 October 2026: organizer clarifications and NAV candidate cache
+
+Newer than the historical notes below. See `docs/organizer-clarifications-20261014.md`
+for the entrant-supplied Discord guidance and confirmed email submission route.
+The official batch is currently 1,000 and may grow to 1,100. Model/provider/key/
+budget details are forthcoming in official instructions, not reasons to halt
+other work. No closed external field-family list. Search is candidates only.
+
+Optional NAV candidate cache is wired through both CLIs and the shared pipeline.
+`--nav-cache-input` and `--nav-cache-output` require `--nav-jobs`. Metadata-only
+index, explicit provenance hash/times, bounded 50k rows/32MB, every ad live-checked
+and exact-employer matched. No output reuse or personal credential requirement.
+Missing/invalid cache falls back to discovery; missing token publishes no jobs.
+Nine new focused cache tests pass. Final regression/structural results are in
+`docs/nav-candidate-cache-20261014.md` once completed. Earlier 312-test clean clone
+is historical; validate the final published commit before sending anything.
+
+Submission draft updated at `docs/first-submission-draft.md`; request draft revised
+at `docs/builderr-runtime-access-request.md`. No email, main-repository commit,
+push, deployment or official submission was performed. Current live baseline
+remains 12 verified sites, seven company-authored articles and zero jobs per 100.
+
+---
+
 # Signalpost handoff — 11 October 2026
+
+## Cloud development update — 12 October 2026 (latest)
+
+Latest continuation — 14 October, official traps and NAV integration: read
+`OFFICIAL_RUN.md` and `docs/nav-and-evaluator-readiness-20261014.md`. User supplied
+official guidance: dynamic runtime companies, growing batch, one command, clean
+install and organizer-supplied model/API access; personal third-party keys cannot
+be the official dependency. Prepared (not sent) the requested clarification in
+`docs/builderr-runtime-access-request.md`; provider/model/tool/budget remain unknown.
+Optional NAV adapter is implemented with shared bounded scan, exact employer/UUID,
+fresh dates/status, safe URLs, auditable JSON, prior-ID revalidation and removal
+of unconfirmed ads from current/public display while retaining private evidence.
+It requires evaluator `NAV_API_TOKEN`; no production public-token fallback.
+Default recent-update window is seven days with explicit incomplete coverage;
+no cross-run index. Live private check: 12,000 entries/12 pages, records for all
+124 development inputs, zero matching candidates; not a live job-coverage gain.
+Strategy `sources_v6_optional_shared_nav_jobs`. **312 tests**, declared install
+and refresh pass in a fresh pinned local clone without venv/tools/out. Fixed
+read-only-home uv/pip caches using ignored project-local defaults. Fixed unknown
+JSON wrapper silently becoming an empty batch. Actual evaluator emits 1,511/1,511
+fresh synthetic runtime inputs in order with keys empty and NAV unavailable;
+one registry-missing input retained, audited package accepted, no HTTP. This is
+structural verification, not official-scale network performance. Isolated local
+validation commit `8f05a66947dafa50687a821ffe89339ede9b0f0e` is NOT a published GitHub
+hash; actual repo/remote remain at original HEAD with all user changes preserved.
+Current code fingerprint matches the clean clone. No paid calls, deployment,
+user-repo commit, push or submission. Need Builderr's runtime/credential answers,
+score-relevant coverage work, then eventual exact published-commit verification.
+Original holdout untouched. Prior continuation entries below are historical.
+
+Latest continuation — 14 October, discovery gaps improved: read
+`docs/discovery-improvements-20261014.md`. Final same-input 100-company acquisition
+supports **12 websites** (all previous ten plus Eiklid Rusten and BB Media), seven
+company-authored articles across three companies and zero jobs. Whole evaluator
+178.895 seconds; 1,218 operations; $0 estimated paid APIs. **299 tests** pass.
+Final current-code offline export/package under
+`out/discovery-gaps-release-20261014/` audits 437 snapshots/3,147 locators with no
+errors; use its package and local public sample. Browser and refresh checks pass.
+Strategy `sources_v5_search_fallback_and_legal_blocks`: robust org-label
+punctuation, compact legal-ID paragraphs, one capped search after failed
+registry/email candidates, more directory exclusions, dated labelled HTML jobs,
+bounded gzip HTML and robots decoding while preserving original evidence bytes.
+Separate final development24 emits all inputs: six sites/four articles/zero jobs.
+The NFS compressed page verifies/audits offline from retained bytes, but its fresh
+robots endpoint returned 503; it stays blocked in live counts. A shortened-query
+experiment was reverted after losing a valid candidate. The original holdout
+remains untouched. NAV's documented public-token experiment **works**; six pages
+contain 6,000 entries but zero exact-name candidates for these 124 inputs, so no
+job claims. See `docs/nav-job-feed-research.md`: next is a shared feed index,
+exact-employer checks, explicit incomplete scans, withdrawal handling, stable
+consumer credentials and measured official-scale budgets. No NAV production
+connector, paid budget, deployment, commit, push or submission. Qualification
+and official score remain unmeasured. Prior entries below are historical.
+
+Latest continuation — 14 October, authenticated smoke complete: published network
+and `TAVILY_API_KEY` are ready. Read `docs/tavily-smoke-20261014.md`. Same frozen
+100-company input completed in **162.751 seconds**, with 100 terminal envelopes,
+complete telemetry and no unfinished companies. Reviewed results: **10 verified
+websites, seven dated company-authored articles across three companies, zero
+jobs**, versus the prior six sites/four articles. One property-manager website
+was wrongly accepted during acquisition; the new footer legal-contact-owner gate
+rejects it. Use `out/tavily-smoke-20261014-reviewed/package/`, never the raw package.
+Offline corrected export: 432 snapshots, 3,137 locators, zero errors, zero new
+HTTP. **286 tests**, refresh and the local 100-profile viewer pass. Free Researcher
+allowance was verified before the bounded run; estimated paid API cost is $0.
+Provider usage still reports zero, so nominal credits are not a verified invoice
+or remaining balance. No paid-budget authorization, holdout crawl, deployment,
+GitHub push or official submission. Coverage remains too limited to infer 65/100.
+Next: broaden exact-company discovery and supported jobs/external field families;
+measure official-scale resources and obtain the official budget before release.
+Older continuation entries below are historical, including their missing-key state.
+
+Latest continuation — 14 October: unrestricted networking is **enforced**, DNS
+flag ready, and provider pricing/terms are verified. Read
+`docs/search-provider-research.md` first. Recommend Tavily Basic free Researcher
+(1,000 monthly credits, no card). Optional Tavily integration is implemented;
+**283 tests**, refresh and private evidence audit pass. Four bounded anonymous
+queries produced one newly verified company site and three 2026 company-authored
+posts; unresolved matches stay ambiguous. This is private development with reused
+registry evidence and unmeasured company runtime, not a fresh 100-company run.
+Original holdout untouched; $0 paid cost. Local 100-profile viewer is refreshed
+under `out/provider-research-20261014/local-public-refresh/signalpost/`, not deployed.
+`TAVILY_API_KEY` requirement is saved, scoped to api.tavily.com, still missing.
+User needs the free-plan key in environment settings (PAYG disabled), save/publish;
+then verify and run the bounded same-input 100-company test with price/cap 0 and
+max 100 queries. Production has no anonymous default. Brave/Serper remain unused;
+current terms concerns are documented. No push or official submission. Earlier
+13 October smoke results below are preserved; do not add the private trial to
+those results and call it another full live batch.
+
+Latest user priority — improve before the first official entry. Read
+`docs/score-improvement-20261013.md` and `docs/search-provider-research.md` first.
+Same-input 100-company run: **127.498 seconds, 661 requests, six verified sites,
+four dated company-authored articles across two companies, zero jobs, 60
+comparable annual revenue explanations, $0 paid APIs**. All envelopes and the
+421-snapshot/3,116-locator package audit pass. Locked clean-source installation
+passes **274 tests**; refresh and Chromium public-sample checks pass. Public
+100-profile HTML is local under `out/score-improvement-20261013/public/signalpost/`.
+Optional capped Brave discovery is implemented but disabled; no key/budget/terms
+verification or live search test. Five pricing/terms domains are saved in the
+environment draft and require save/publication before current-price research.
+Current strategy: `sources_v4_discovery_and_crawl`. Holdout remains untouched;
+code is uncommitted, no GitHub push or official submission. Earlier baseline
+records below are preserved history, not the current release status.
+
+First smoke complete — 13 October: read `docs/first-smoke-report.md` and JSON.
+100/100 envelopes, no unfinished companies, 596.945-second whole evaluator,
+$0 paid APIs. Both public-universe hashes verified; prior 48 diagnostic IDs and
+known holdout domains excluded. Final reviewed export: four accepted websites,
+no dated jobs/news, 411 snapshots and 3,101 locators with zero audit errors.
+Raw acquisition initially accepted five; precision review tightened shared-brand
+identity proof, contact citation spans and appointment/careers classification.
+Re-export uses retained bytes with zero new HTTP; separate fingerprints recorded.
+**245 tests and locked install pass in a fresh source copy**. Actual runtime code
+matches that verified copy. The draft first submission is saved in
+`docs/first-submission-draft.md`; next steps are reviewed code publication, exact
+commit/clean-clone validation and explicit submission authorization. Code remains
+uncommitted; no official score or qualification. Do not wait for optional APIs.
+
+Newest update — 13 October: DNS compatibility is integrated; read
+`docs/dns-integration-20261013.md`. **242 tests pass**. With the command-local
+`SIGNALPOST_DNS_OVER_HTTPS=1` flag, the two-company live run acquires registry
+evidence for both and verifies one real website. Five snapshots/20 locators audit
+with zero errors. This supersedes the blanket live-DNS blocker below. The second
+site redirects to www.nordicform.no and remains unresolved; no dated jobs/news in
+the small run. The environment draft suggests the flag and adds the resolver and
+observed redirect domain. Publish integrated changes/settings for future tasks;
+the fresh 100-company smoke and official submission remain pending.
+
+Latest integration: all three separate-chat patches are now applied in this
+coordinator checkout. Read `docs/integration-review-20261012.md` first. **205 tests
+pass**, including integrated timeout, live-runner and review-packet checks; refresh
+and packaged dated-event evidence audits pass. A fresh proxy registry request now
+succeeds, but local DNS still fails and the actual crawler produces failure
+envelopes. Required domains are already listed: diagnose/restore executor DNS,
+not another duplicate allowlist save, before the fresh 100-company smoke. Preserve
+the uncommitted integrated changes before restarting/restoring the environment.
+
+Current user priority: reach a first valid submission and official result quickly,
+then improve through revisions. Use `docs/first-submission-plan.md` for the release
+checklist and baseline cost declaration. The three workers' reports are now in
+`docs/task-results/`; their original live artifacts were not transferred, and the
+coordinator has rerun the bounded live check. Do not
+wait for every planned connector; preserve required live smoke and validity checks.
+
+Read `docs/parallel-work-report.md` and `docs/dated-events-progress.md` for cloud
+changes after the historical local continuation below. Work is now in the existing
+`/workspace/signalpost-starter-kit` checkout; preserve the uncommitted changes.
+
+- Portable cited-evidence packaging, a single evaluator wrapper, offline reviewed
+  strategy comparisons, and opt-in Wikidata candidates are implemented.
+- Dated news/jobs now follow opaque same-host content-card links, extract scoped
+  DOM metadata, and audit exact dates/employer fields or JSON-LD pointers.
+- Job expiry uses snapshot time; failed refresh retains prior supported facts.
+  Strategy is `free_sources_v3_dated_events`; **163 regression tests pass**.
+- Synthetic before/after: 0 to 2 dated news items on one fixture company and 0 to
+  1 job on another, with wrong-owner/employer negatives rejected. This is not a
+  live gain, independent review, or official score.
+- Two real development-site attempts failed DNS; proxy checks returned HTTP 403.
+  Narrow registry/site domain additions were saved to the environment draft but
+  are not applied/published. Details and retry scope are in the dated-events doc.
+- Independent labels, complete host separation, real coverage measurements,
+  resource-budget validation, and a fresh 100-company live smoke remain pending.
+  Holdout is untouched. No paid calls, submission, commits, or publication.
 
 ## Continuation update — 12 October 2026 (read first)
 

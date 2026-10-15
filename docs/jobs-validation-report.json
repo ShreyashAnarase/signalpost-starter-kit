@@ -1,0 +1,83 @@
+{
+  "date_ist": "2026-10-14",
+  "mode": "selected_positive_controls_not_random_coverage",
+  "source_sha256": "b98393804c380ae1fbff62f7c4d7a97b42aa631e615f6e70701f4e08adcf5973",
+  "companies": [
+    {
+      "organisation_number": "965808752",
+      "name": "ASSEMBLIN AS"
+    },
+    {
+      "organisation_number": "916326211",
+      "name": "OCAB AS"
+    },
+    {
+      "organisation_number": "935333156",
+      "name": "ADECCO NORGE AS"
+    }
+  ],
+  "verified_job_advertisements": 17,
+  "verified_companies": 3,
+  "eligible_public_universe": true,
+  "production_credential_verified": false,
+  "public_experiment_token_used": true,
+  "token_retained": false,
+  "regression_tests_passed": 334,
+  "evidence_audit": {
+    "passed": true,
+    "contract": {
+      "passed": true,
+      "checks": {
+        "exact_input_membership_and_order": true,
+        "unique_organisation_numbers": true,
+        "one_envelope_per_input": true,
+        "valid_claims_and_evidence": true
+      },
+      "invalid_envelopes": []
+    },
+    "envelopes": 3,
+    "unique_snapshots": 30,
+    "evidence_locators_checked": 51,
+    "errors": [],
+    "boundary": "Checks retained bytes and locators, not human exact-company precision or the official competition score."
+  },
+  "portable_package_audit": {
+    "passed": true,
+    "contract": {
+      "passed": true,
+      "checks": {
+        "exact_input_membership_and_order": true,
+        "unique_organisation_numbers": true,
+        "one_envelope_per_input": true,
+        "valid_claims_and_evidence": true
+      },
+      "invalid_envelopes": []
+    },
+    "envelopes": 3,
+    "unique_snapshots": 30,
+    "evidence_locators_checked": 51,
+    "errors": [],
+    "boundary": "Checks retained bytes and locators, not human exact-company precision or the official competition score."
+  },
+  "refresh": {
+    "new_http_requests": 0,
+    "previous_jobs": 17,
+    "current_available_jobs": 0,
+    "idempotent": true,
+    "audit_passed": true
+  },
+  "existing_100_company_smoke": {
+    "mode": "offline_current_code_reexport_of_earlier_live_run",
+    "new_http_requests": 0,
+    "verified_sites": 14,
+    "verified_job_advertisements": 0,
+    "audit_passed": true
+  },
+  "paid_api_cost_usd": 0,
+  "new_search_queries": 0,
+  "boundaries": [
+    "Selected hiring-positive cases are not an official score or a random company recall estimate.",
+    "NAV private access remains unconfigured; optional secret requirement saved only.",
+    "No registration email, main-repo commit, push, deployment or competition submission."
+  ]
+}

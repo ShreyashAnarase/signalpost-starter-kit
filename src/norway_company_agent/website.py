@@ -1,9 +1,7 @@
 from __future__ import annotations
 
 import json
-import ipaddress
 import re
-import socket
 import time
 import urllib.error
 import urllib.parse
@@ -18,6 +16,7 @@ import tldextract
 import trafilatura
 
 from .evidence import evidence
+from .network import assert_public_url
 
 USER_AGENT = "builderr-signalpost-poc/0.1 (+https://builderr.ai)"
 _DOMAIN_EXTRACTOR = tldextract.TLDExtract(suffix_list_urls=(), cache_dir=None)
@@ -36,23 +35,6 @@ PRIORITY_TERMS = (
     "team", "people", "locations", "lokasjoner", "avdelinger", "butikker",
     "news", "press", "aktuelt", "nyheter",
 )
-
-
-def assert_public_url(url: str) -> None:
-    parsed = urllib.parse.urlparse(url)
-    host = (parsed.hostname or "").lower().rstrip(".")
-    if parsed.scheme not in {"http", "https"} or not host:
-        raise ValueError("Only public HTTP(S) URLs are allowed")
-    if host == "localhost" or host.endswith(".localhost") or host.endswith(".local"):
-        raise ValueError("Local hosts are blocked")
-    try:
-        addresses = {item[4][0] for item in socket.getaddrinfo(host, parsed.port or (443 if parsed.scheme == "https" else 80), type=socket.SOCK_STREAM)}
-    except socket.gaierror as exc:
-        raise ValueError("Hostname did not resolve") from exc
-    for address in addresses:
-        ip = ipaddress.ip_address(address)
-        if not ip.is_global:
-            raise ValueError("Private, loopback, link-local, multicast, and reserved addresses are blocked")
 
 
 class SafeRedirectHandler(urllib.request.HTTPRedirectHandler):

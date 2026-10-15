@@ -18,6 +18,8 @@ from typing import Any
 
 from .evidence import utc_now
 from .http import FetchResult
+from .html_text import decode_html
+from .network import DNSValidationCache, ResolutionError
 from .website import assert_public_url
 
 USER_AGENT = "SignalpostResearch/0.2"
@@ -89,7 +91,7 @@ class Capture:
 
 class ResearchSession:
     def __init__(self, store: SnapshotStore, *, timeout: float = 8, deadline: float | None = None,
-                 max_requests: int = 40):
+                 max_requests: int = 40, dns_validation_cache: DNSValidationCache | None = None):
         self.store = store
         self.timeout = timeout
         self.deadline = deadline
@@ -100,6 +102,8 @@ class ResearchSession:
         self.bytes_received = 0
         self.latencies: list[int] = []
         self.attempts: list[dict[str, Any]] = []
+        self.third_party_cost_usd = 0.0
+        self.dns_validation_cache = dns_validation_cache or DNSValidationCache()
 
     def remaining(self) -> float:
         remaining = self.timeout if self.deadline is None else min(self.timeout, self.deadline - time.monotonic())
@@ -112,7 +116,9 @@ class ResearchSession:
             raise AcquisitionError("Research request budget exhausted")
         self.remaining()
         host = urllib.parse.urlsplit(url).hostname or ""
-        interval = 2.1 if "/aarsregnskap/kopi/" in url and url.endswith("/aar") else 0.2
+        # Development search keys allow 100 requests/minute. Share pacing across
+        # workers and sessions, with headroom below that cap (about 92/minute).
+        interval = 0.65 if host == "api.tavily.com" else 2.1 if "/aarsregnskap/kopi/" in url and url.endswith("/aar") else 0.2
         with _host_lock:
             now = time.monotonic()
             start = max(now, _host_next.get(host, now))
@@ -133,73 +139,98 @@ class ResearchSession:
             if response.status == 404:
                 self.robots[origin] = True
             elif 200 <= response.status < 300:
-                parser = urllib.robotparser.RobotFileParser()
-                parser.parse(response.body.decode("utf-8", errors="replace").splitlines())
-                self.robots[origin] = parser
+                try:
+                    text = decode_html(response.body, response.content_type)[0]
+                    parser = urllib.robotparser.RobotFileParser()
+                    parser.parse(text.splitlines())
+                    self.robots[origin] = parser
+                except ValueError:
+                    self.robots[origin] = False
             else:
                 self.robots[origin] = False
         policy = self.robots[origin]
         return policy if isinstance(policy, bool) else policy.can_fetch(USER_AGENT, url)
 
-    def get(self, url: str, *, robots: bool = False, max_bytes: int = 2_000_000,
-            attempts: int = 2) -> Capture:
-        parsed = urllib.parse.urlsplit(url)
-        if parsed.username or parsed.password:
-            raise AcquisitionError("Credentials in source URLs are prohibited", "blocked")
+    def _dns_observer(self, event: dict[str, Any]) -> None:
+        if event["state"] == "started":
+            self._reserve(event["url"])
+        else:
+            self.bytes_received += event["bytes"]
+            self.latencies.append(event["latency_ms"])
+            self.attempts.append({**event, "retrieved_at": utc_now()})
+
+    def _validate_url(self, url: str) -> None:
         try:
-            assert_public_url(url)
+            assert_public_url(url, timeout=self.remaining(), dns_observer=self._dns_observer,
+                              dns_cache=self.dns_validation_cache)
         except ValueError as exc:
-            # DNS outages are operational errors, not a site's refusal.
-            status = "failed" if "resolve" in str(exc).lower() else "blocked"
+            # An unavailable resolver is an operational error, not a site refusal.
+            status = "failed" if isinstance(exc, ResolutionError) else "blocked"
             raise AcquisitionError(str(exc), status) from exc
+
+    def get(self, url: str, *, robots: bool = False, max_bytes: int = 2_000_000,
+            attempts: int = 2, request_headers: dict[str, str] | None = None,
+            retain: bool = True, allow_redirects: bool = True,
+            request_body: bytes | None = None) -> Capture:
+        if (request_headers or request_body is not None) and (allow_redirects or urllib.parse.urlsplit(url).scheme != "https"):
+            raise AcquisitionError("Authenticated API requests require HTTPS and disabled redirects", "blocked")
+        self._validate_url(url)
         if robots and not self._allowed(url):
             raise AcquisitionError("robots.txt denied access or could not establish permission", "blocked")
         session = self
         redirects: list[str] = []
+        validated_urls = {url}
 
         class RedirectHandler(urllib.request.HTTPRedirectHandler):
             max_redirections = 5
 
             def redirect_request(self, req, fp, code, msg, headers, newurl):
-                assert_public_url(newurl)
-                parts = urllib.parse.urlsplit(newurl)
-                if parts.username or parts.password:
-                    raise AcquisitionError("Redirect contains credentials", "blocked")
+                if not allow_redirects:
+                    raise AcquisitionError("Redirects are prohibited for this authenticated API request", "blocked")
+                session._validate_url(newurl)
                 if robots and not session._allowed(newurl):
                     raise AcquisitionError("Redirect target disallows crawling", "blocked")
                 session._reserve(newurl)
                 redirects.append(newurl)
+                validated_urls.add(newurl)
                 return super().redirect_request(req, fp, code, msg, headers, newurl)
 
         opener = urllib.request.build_opener(RedirectHandler())
+        logged_url = url if retain else urllib.parse.urlunsplit((*urllib.parse.urlsplit(url)[:3], "", ""))
         for attempt in range(attempts):
             self._reserve(url)
             started = time.monotonic()
             response = None
             try:
-                request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, "Accept": "application/json,text/html,application/xml,text/plain,*/*"})
+                request = urllib.request.Request(url, data=request_body, headers={"User-Agent": USER_AGENT, "Accept": "application/json,text/html,application/xml,text/plain,*/*", **(request_headers or {})})
                 try:
                     response = opener.open(request, timeout=self.remaining())
                 except urllib.error.HTTPError as exc:
                     response = exc
                 with response:
+                    if response.geturl() not in validated_urls:
+                        self._validate_url(response.geturl())
                     body = response.read(max_bytes + 1)
                     self.bytes_received += len(body)
                     if len(body) > max_bytes:
                         raise AcquisitionError("Source exceeds response byte budget")
+                    retained = self.store.save(body) if retain else {"content_sha256": hashlib.sha256(body).hexdigest(), "snapshot_path": ""}
                     capture = Capture(url, response.geturl(), response.code,
                                       response.headers.get("Content-Type", ""), body, utc_now(),
-                                      **self.store.save(body), redirects=list(redirects))
-                self.captures[url] = capture
-                self.captures[capture.final_url] = capture
-                self.attempts.append({"url": url, "status": capture.status, "retrieved_at": capture.retrieved_at,
+                                      **retained, redirects=list(redirects))
+                if retain:
+                    self.captures[url] = capture
+                    self.captures[capture.final_url] = capture
+                # Search queries/titles/snippets are transient; log only the API
+                # endpoint and query hash, never the authentication headers.
+                self.attempts.append({"url": logged_url, "status": capture.status, "retrieved_at": capture.retrieved_at,
                                       "content_sha256": capture.content_sha256})
                 if capture.status not in {429, 500, 502, 503, 504} or attempt + 1 == attempts:
                     return capture
             except AcquisitionError:
                 raise
             except (OSError, ValueError, urllib.error.URLError) as exc:
-                self.attempts.append({"url": url, "error": type(exc).__name__, "retrieved_at": utc_now()})
+                self.attempts.append({"url": logged_url, "error": type(exc).__name__, "retrieved_at": utc_now()})
                 if isinstance(exc, ssl.SSLError) or isinstance(getattr(exc, "reason", None), ssl.SSLError):
                     raise AcquisitionError(f"TLS verification/connection failed: {str(exc)[:180]}", tls_failure=True) from exc
                 if attempt + 1 == attempts:
@@ -224,4 +255,4 @@ class ResearchSession:
 
     def metrics(self) -> dict[str, Any]:
         return {"requests": self.requests, "bytes": self.bytes_received,
-                "latencies_ms": self.latencies, "third_party_cost_usd": 0}
+                "latencies_ms": self.latencies, "third_party_cost_usd": self.third_party_cost_usd}

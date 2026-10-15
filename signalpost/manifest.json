@@ -1,0 +1,7 @@
+{
+  "profiles": 100,
+  "audit_passed": true,
+  "route": "/signalpost/",
+  "hosting_status": "local artifact; not deployed",
+  "raw_snapshots_exported": false
+}

@@ -1,0 +1,343 @@
+{
+  "date_ist": "2026-10-15",
+  "status": "local_live_smoke_not_official",
+  "run_id": "first-entry-smoke-20261015",
+  "input_count": 100,
+  "emitted_envelopes": 100,
+  "input_sha256": "4664ca34c48814851f1601a00a70f1d54aa988197677abd13d8d2f14da9464bb",
+  "source_sha256": "b98393804c380ae1fbff62f7c4d7a97b42aa631e615f6e70701f4e08adcf5973",
+  "strategy": "sources_v9_live_nav_ad_content_and_candidates",
+  "evaluator": {
+    "status": "completed",
+    "stage": "packaging",
+    "exit_code": 0,
+    "subprocess_returncode": 0,
+    "error": null,
+    "elapsed_seconds": 173.706758721004,
+    "evaluator_timeout_seconds": 1800.0,
+    "package_accepted": true,
+    "artifacts": "complete audited package",
+    "boundary": "Offline byte/locator validation is not claim truth or an official score."
+  },
+  "operations": {
+    "requests": 1190,
+    "bytes": 72264482,
+    "runtime_ms": 166388,
+    "third_party_cost_usd": 0.0,
+    "request_latency_ms": {
+      "n": 1158,
+      "p50_ms": 299.0,
+      "p95_ms": 1573.0,
+      "max_ms": 11309
+    },
+    "company_runtime_ms": {
+      "n": 100,
+      "p50_ms": 8750.0,
+      "p95_ms": 25738.0,
+      "max_ms": 41981
+    },
+    "parent_peak_rss_bytes": 72261632,
+    "telemetry_complete": true
+  },
+  "coverage": {
+    "business_description": {
+      "companies": 10,
+      "claims": 10,
+      "company_coverage": 0.1,
+      "availability": {
+        "not_available": 34,
+        "ambiguous": 47,
+        "available": 10,
+        "failed": 4,
+        "blocked": 5
+      }
+    },
+    "careers_page": {
+      "companies": 2,
+      "claims": 4,
+      "company_coverage": 0.02,
+      "availability": {
+        "available": 4
+      }
+    },
+    "company_declared_profile": {
+      "companies": 9,
+      "claims": 24,
+      "company_coverage": 0.09,
+      "availability": {
+        "not_available": 35,
+        "ambiguous": 47,
+        "available": 24,
+        "failed": 4,
+        "blocked": 5
+      }
+    },
+    "company_news": {
+      "companies": 3,
+      "claims": 7,
+      "company_coverage": 0.03,
+      "availability": {
+        "not_available": 41,
+        "ambiguous": 47,
+        "available": 7,
+        "failed": 4,
+        "blocked": 5
+      }
+    },
+    "contact_email": {
+      "companies": 26,
+      "claims": 26,
+      "company_coverage": 0.26,
+      "availability": {
+        "not_available": 74,
+        "available": 26
+      }
+    },
+    "contact_page": {
+      "companies": 4,
+      "claims": 5,
+      "company_coverage": 0.04,
+      "availability": {
+        "available": 5
+      }
+    },
+    "contact_phone": {
+      "companies": 36,
+      "claims": 36,
+      "company_coverage": 0.36,
+      "availability": {
+        "not_available": 64,
+        "available": 36
+      }
+    },
+    "employee_count": {
+      "companies": 15,
+      "claims": 15,
+      "company_coverage": 0.15,
+      "availability": {
+        "not_available": 85,
+        "available": 15
+      }
+    },
+    "financial_history": {
+      "companies": 100,
+      "claims": 100,
+      "company_coverage": 1.0,
+      "availability": {
+        "available": 100
+      }
+    },
+    "financials.annual_result": {
+      "companies": 100,
+      "claims": 283,
+      "company_coverage": 1.0,
+      "availability": {
+        "available": 283
+      }
+    },
+    "financials.assets": {
+      "companies": 100,
+      "claims": 283,
+      "company_coverage": 1.0,
+      "availability": {
+        "available": 283
+      }
+    },
+    "financials.currency": {
+      "companies": 100,
+      "claims": 283,
+      "company_coverage": 1.0,
+      "availability": {
+        "available": 283
+      }
+    },
+    "financials.debt": {
+      "companies": 100,
+      "claims": 281,
+      "company_coverage": 1.0,
+      "availability": {
+        "available": 281,
+        "not_available": 2
+      }
+    },
+    "financials.equity": {
+      "companies": 100,
+      "claims": 283,
+      "company_coverage": 1.0,
+      "availability": {
+        "available": 283
+      }
+    },
+    "financials.operating_result": {
+      "companies": 100,
+      "claims": 280,
+      "company_coverage": 1.0,
+      "availability": {
+        "available": 280,
+        "not_available": 3
+      }
+    },
+    "financials.profit_before_tax": {
+      "companies": 100,
+      "claims": 282,
+      "company_coverage": 1.0,
+      "availability": {
+        "available": 282,
+        "not_available": 1
+      }
+    },
+    "financials.revenue": {
+      "companies": 90,
+      "claims": 232,
+      "company_coverage": 0.9,
+      "availability": {
+        "available": 232,
+        "not_available": 51
+      }
+    },
+    "group_relationships": {
+      "companies": 5,
+      "claims": 5,
+      "company_coverage": 0.05,
+      "availability": {
+        "not_available": 95,
+        "available": 5
+      }
+    },
+    "industry": {
+      "companies": 100,
+      "claims": 100,
+      "company_coverage": 1.0,
+      "availability": {
+        "available": 100
+      }
+    },
+    "job_posting": {
+      "companies": 0,
+      "claims": 0,
+      "company_coverage": 0.0,
+      "availability": {
+        "not_available": 44,
+        "ambiguous": 47,
+        "failed": 4,
+        "blocked": 5
+      }
+    },
+    "latest_filing_year": {
+      "companies": 100,
+      "claims": 100,
+      "company_coverage": 1.0,
+      "availability": {
+        "available": 100
+      }
+    },
+    "legal_form": {
+      "companies": 100,
+      "claims": 100,
+      "company_coverage": 1.0,
+      "availability": {
+        "available": 100
+      }
+    },
+    "legal_name": {
+      "companies": 100,
+      "claims": 100,
+      "company_coverage": 1.0,
+      "availability": {
+        "available": 100
+      }
+    },
+    "locations": {
+      "companies": 100,
+      "claims": 100,
+      "company_coverage": 1.0,
+      "availability": {
+        "available": 100
+      }
+    },
+    "locations_page": {
+      "companies": 1,
+      "claims": 1,
+      "company_coverage": 0.01,
+      "availability": {
+        "available": 1
+      }
+    },
+    "news_page": {
+      "companies": 5,
+      "claims": 10,
+      "company_coverage": 0.05,
+      "availability": {
+        "available": 10
+      }
+    },
+    "official_website": {
+      "companies": 14,
+      "claims": 14,
+      "company_coverage": 0.14,
+      "availability": {
+        "not_available": 30,
+        "ambiguous": 47,
+        "available": 14,
+        "failed": 4,
+        "blocked": 5
+      }
+    },
+    "registered_address": {
+      "companies": 100,
+      "claims": 100,
+      "company_coverage": 1.0,
+      "availability": {
+        "available": 100
+      }
+    },
+    "roles": {
+      "companies": 100,
+      "claims": 100,
+      "company_coverage": 1.0,
+      "availability": {
+        "available": 100
+      }
+    }
+  },
+  "audit": {
+    "passed": true,
+    "contract": {
+      "passed": true,
+      "checks": {
+        "exact_input_membership_and_order": true,
+        "unique_organisation_numbers": true,
+        "one_envelope_per_input": true,
+        "valid_claims_and_evidence": true
+      },
+      "invalid_envelopes": []
+    },
+    "envelopes": 100,
+    "unique_snapshots": 448,
+    "evidence_locators_checked": 3164,
+    "errors": [],
+    "boundary": "Checks retained bytes and locators, not human exact-company precision or the official competition score."
+  },
+  "search": {
+    "provider": "Tavily Basic",
+    "queries": 94,
+    "local_declared_price_per_1000": 0,
+    "local_estimated_paid_fees_usd": 0,
+    "reference_paid_price_per_query_usd": 0.008,
+    "reference_paid_estimate_100_usd": 0.752,
+    "extrapolation_1000_usd": 7.52,
+    "extrapolation_1100_usd": 8.272,
+    "proposed_query_cap": 1100,
+    "proposed_fee_cap_usd": 8.8,
+    "free_allowance_assumed_for_official": false,
+    "invoice_verified": false
+  },
+  "production_nav_enabled": false,
+  "regression_tests_passed": 334,
+  "boundaries": [
+    "Not an official score or independent human precision/recall.",
+    "Larger official batches accept supplied inputs; full live performance at that scale is unmeasured.",
+    "NAV positive controls are separate from this sample and not added to its counts.",
+    "Final exact commit and clean-clone verification belong in the separate release manifest."
+  ]
+}

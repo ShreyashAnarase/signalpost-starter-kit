@@ -28,7 +28,16 @@ def read_organisation_inputs(path: str | Path) -> list[dict[str, Any]]:
     values: list[Any]
     if source.suffix == ".json":
         body = json.loads(text)
-        values = body if isinstance(body, list) else body.get("organisation_numbers", [])
+        if isinstance(body, list):
+            values = body
+        elif isinstance(body, dict) and "organisation_numbers" in body:
+            values = body["organisation_numbers"]
+        elif isinstance(body, dict) and "organisation_number" in body:
+            values = [body]
+        else:
+            raise ValueError("JSON batch must be an array, an organisation_numbers wrapper, or an organisation_number object")
+        if not isinstance(values, list):
+            raise ValueError("organisation_numbers must be an array")
     elif source.suffix == ".jsonl":
         values = [json.loads(line) for line in text.splitlines() if line.strip()]
     else:

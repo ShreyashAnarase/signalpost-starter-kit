@@ -1,0 +1,227 @@
+{
+  "notice": "Synthetic fixtures only, not real company evidence or human labels",
+  "baseline": [
+    {
+      "organisation_number": "1",
+      "availability": "available",
+      "claims": [
+        {
+          "id": "a",
+          "field": "job_posting",
+          "availability": "available"
+        }
+      ],
+      "operations": {
+        "requests": 2,
+        "runtime_ms": 10,
+        "third_party_cost_usd": 0
+      }
+    },
+    {
+      "organisation_number": "2",
+      "availability": "available",
+      "claims": [],
+      "operations": {
+        "requests": 2,
+        "runtime_ms": 10,
+        "third_party_cost_usd": 0
+      }
+    }
+  ],
+  "challenger": [
+    {
+      "organisation_number": "1",
+      "availability": "available",
+      "claims": [
+        {
+          "id": "a",
+          "field": "job_posting",
+          "availability": "available"
+        }
+      ],
+      "operations": {
+        "requests": 2,
+        "runtime_ms": 10,
+        "third_party_cost_usd": 0
+      }
+    },
+    {
+      "organisation_number": "2",
+      "availability": "available",
+      "claims": [
+        {
+          "id": "b",
+          "field": "job_posting",
+          "availability": "available"
+        }
+      ],
+      "operations": {
+        "requests": 2,
+        "runtime_ms": 10,
+        "third_party_cost_usd": 0
+      }
+    }
+  ],
+  "labels": {
+    "opportunities": [
+      {
+        "id": "org1-job",
+        "organisation_number": "1",
+        "field": "job_posting",
+        "evidence": {
+          "source_url": "https://example.com/synthetic",
+          "content_sha256": "0392a055e3629ae5c115e5ef22343f9a155341bad9c95e78e15dcbcd83fe9d3d",
+          "span": "synthetic job",
+          "retrieved_at": "2026-10-12T00:00:00Z",
+          "extraction_method": "synthetic_fixture",
+          "source_locator": {
+            "type": "extracted_text",
+            "text": "synthetic job"
+          }
+        },
+        "review": {
+          "kind": "independent_human",
+          "reviewer": "synthetic-fixture-reviewer",
+          "reviewed_at": "2026-10-12T00:00:00Z"
+        }
+      },
+      {
+        "id": "org1-second-job",
+        "organisation_number": "1",
+        "field": "job_posting",
+        "evidence": {
+          "source_url": "https://example.com/synthetic",
+          "content_sha256": "0392a055e3629ae5c115e5ef22343f9a155341bad9c95e78e15dcbcd83fe9d3d",
+          "span": "synthetic job",
+          "retrieved_at": "2026-10-12T00:00:00Z",
+          "extraction_method": "synthetic_fixture",
+          "source_locator": {
+            "type": "extracted_text",
+            "text": "synthetic job"
+          }
+        },
+        "review": {
+          "kind": "independent_human",
+          "reviewer": "synthetic-fixture-reviewer",
+          "reviewed_at": "2026-10-12T00:00:00Z"
+        }
+      },
+      {
+        "id": "org2-job",
+        "organisation_number": "2",
+        "field": "job_posting",
+        "evidence": {
+          "source_url": "https://example.com/synthetic",
+          "content_sha256": "0392a055e3629ae5c115e5ef22343f9a155341bad9c95e78e15dcbcd83fe9d3d",
+          "span": "synthetic job",
+          "retrieved_at": "2026-10-12T00:00:00Z",
+          "extraction_method": "synthetic_fixture",
+          "source_locator": {
+            "type": "extracted_text",
+            "text": "synthetic job"
+          }
+        },
+        "review": {
+          "kind": "independent_human",
+          "reviewer": "synthetic-fixture-reviewer",
+          "reviewed_at": "2026-10-12T00:00:00Z"
+        }
+      }
+    ],
+    "judgments": [
+      {
+        "run": "baseline",
+        "organisation_number": "1",
+        "claim_id": "a",
+        "opportunity_id": "org1-job",
+        "exact_entity": true,
+        "correct": true,
+        "evidence_valid": true,
+        "material": true,
+        "review": {
+          "kind": "independent_human",
+          "reviewer": "synthetic-fixture-reviewer",
+          "reviewed_at": "2026-10-12T00:00:00Z"
+        }
+      },
+      {
+        "run": "challenger",
+        "organisation_number": "1",
+        "claim_id": "a",
+        "opportunity_id": "org1-job",
+        "exact_entity": true,
+        "correct": true,
+        "evidence_valid": true,
+        "material": true,
+        "review": {
+          "kind": "independent_human",
+          "reviewer": "synthetic-fixture-reviewer",
+          "reviewed_at": "2026-10-12T00:00:00Z"
+        }
+      },
+      {
+        "run": "challenger",
+        "organisation_number": "2",
+        "claim_id": "b",
+        "opportunity_id": "org2-job",
+        "exact_entity": true,
+        "correct": true,
+        "evidence_valid": true,
+        "material": true,
+        "review": {
+          "kind": "independent_human",
+          "reviewer": "synthetic-fixture-reviewer",
+          "reviewed_at": "2026-10-12T00:00:00Z"
+        }
+      }
+    ],
+    "refresh_judgments": [
+      {
+        "run": "challenger",
+        "case_id": "synthetic-refresh",
+        "correct": true,
+        "false_change": false,
+        "review": {
+          "kind": "independent_human",
+          "reviewer": "synthetic-fixture-reviewer",
+          "reviewed_at": "2026-10-12T00:00:00Z"
+        }
+      }
+    ],
+    "scope": [
+      {
+        "organisation_number": "1",
+        "field": "job_posting",
+        "search_scope": "Synthetic fixture sources only",
+        "complete_within_scope": true,
+        "review": {
+          "kind": "independent_human",
+          "reviewer": "synthetic-fixture-reviewer",
+          "reviewed_at": "2026-10-12T00:00:00Z"
+        }
+      },
+      {
+        "organisation_number": "2",
+        "field": "job_posting",
+        "search_scope": "Synthetic fixture sources only",
+        "complete_within_scope": true,
+        "review": {
+          "kind": "independent_human",
+          "reviewer": "synthetic-fixture-reviewer",
+          "reviewed_at": "2026-10-12T00:00:00Z"
+        }
+      }
+    ]
+  },
+  "policy": {
+    "target_fields": [
+      "job_posting"
+    ],
+    "minimum_coverage_gain": 0.1,
+    "maximum_precision_loss": 0,
+    "resource_caps": {
+      "requests": 10,
+      "third_party_cost_usd": 0
+    }
+  }
+}

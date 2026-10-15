@@ -3,6 +3,11 @@ set -euo pipefail
 
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
 
+# A clean evaluator may have a read-only home. Keep installation caches inside
+# the ignored, writable project directory instead of relying on prior user state.
+export UV_CACHE_DIR="${UV_CACHE_DIR:-$PWD/.tools/uv-cache}"
+export PIP_CACHE_DIR="${PIP_CACHE_DIR:-$PWD/.tools/pip-cache}"
+
 # Keep the bootstrap tool inside the already-ignored .tools directory.
 if command -v uv >/dev/null 2>&1; then
   uv_bin="$(command -v uv)"

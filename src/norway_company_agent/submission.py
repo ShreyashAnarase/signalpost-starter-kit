@@ -3,6 +3,8 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
+from datetime import date
 from functools import lru_cache
 from pathlib import Path
 from typing import Any, Literal
@@ -149,7 +151,11 @@ def compile_claims(profile: dict[str, Any]) -> tuple[list[dict], list[dict]]:
         ids = []
         metadata = site_fact or record
         if availability == "available":
-            if not all(metadata.get(name) for name in ("source_url", "retrieved_at", "content_sha256", "snapshot_path")) or not snapshot_valid(metadata):
+            supporting = (site_fact or {}).get('supporting_evidence', [])
+            required = [metadata, *supporting] if isinstance(supporting, list) else [None]
+            if not all(isinstance(item, dict) and all(item.get(name) for name in
+                    ("source_url", "retrieved_at", "content_sha256", "snapshot_path"))
+                    and snapshot_valid(item) for item in required):
                 availability, note = "failed", "Retained source snapshot or provenance is missing"
             else:
                 if site_fact:
@@ -170,7 +176,7 @@ def compile_claims(profile: dict[str, Any]) -> tuple[list[dict], list[dict]]:
                     source_id = stable_id("ev", metadata["source_url"], metadata["content_sha256"], locator)
                     sources[source_id] = {
                         "id": source_id, "source_url": metadata["source_url"],
-                        "source_class": "company_owned" if site_fact else record.get("source_class", "official_registry"),
+                        "source_class": site_fact.get("source_class", "company_owned") if site_fact else record.get("source_class", "official_registry"),
                         "retrieved_at": metadata["retrieved_at"], "content_sha256": metadata["content_sha256"],
                         "snapshot_path": metadata["snapshot_path"], "claim_span": span,
                         "source_locator": locator,
@@ -178,6 +184,14 @@ def compile_claims(profile: dict[str, Any]) -> tuple[list[dict], list[dict]]:
                         "reporting_period": period,
                     }
                     ids = [source_id]
+                    for proof in supporting:
+                        locator = proof['source_locator']
+                        source_id = stable_id('ev', proof['source_url'], proof['content_sha256'], locator)
+                        sources[source_id] = {key: proof[key] for key in ('source_url', 'source_class',
+                            'retrieved_at', 'content_sha256', 'snapshot_path', 'claim_span',
+                            'source_locator', 'extraction_method')}
+                        sources[source_id].update(id=source_id, reporting_period=period)
+                        ids.append(source_id)
         claims.append({"id": stable_id("claim", org, field, key), "field": field,
                        "value": value if availability == "available" else None,
                        "availability": availability, "evidence_ids": ids, "confidence": None,
@@ -227,7 +241,7 @@ def compile_claims(profile: dict[str, Any]) -> tuple[list[dict], list[dict]]:
             record = financial if period else {**financial, "status": "failed", "note": "Financial reporting period is missing"}
             emit("financials." + field, account.get(field), record, pointer=f"/{index}/{pointer}",
                  key=[period, account.get("account_type"), account.get("record_id")], period=period, account_scope=account.get("account_type"))
-        emit("financials.currency", account.get("currency"), financial, pointer=f"/{index}/valuta", key=[period, account.get("account_type"), account.get("record_id")], period=period)
+        emit("financials.currency", account.get("currency"), financial, pointer=f"/{index}/valuta", key=[period, account.get("account_type"), account.get("record_id")], period=period, account_scope=account.get("account_type"))
     if not accounts:
         emit("financials", None, financial)
 
@@ -250,7 +264,9 @@ def compile_claims(profile: dict[str, Any]) -> tuple[list[dict], list[dict]]:
 
     website = records.get("website", {})
     facts = (website.get("value") or {}).get("facts") or []
-    for fact in facts:
+    nav = records.get("nav_jobs", {})
+    nav_facts = (nav.get("value") or {}).get("facts") or []
+    for fact, fact_record in [(f, website) for f in facts] + [(f, nav) for f in nav_facts]:
         key = None
         if fact["field"] in {"job_posting", "company_news"}:
             key = [fact["source_url"], fact["value"].get("title") or fact["value"].get("headline")]
@@ -258,8 +274,8 @@ def compile_claims(profile: dict[str, Any]) -> tuple[list[dict], list[dict]]:
             key = fact["value"]["url"]
         elif fact["field"].endswith("_page"):
             key = fact["value"]
-        emit(fact["field"], fact["value"], website, site_fact=fact, key=key, effective_at=fact.get("effective_at"))
-    present = {item["field"] for item in facts}
+        emit(fact["field"], fact["value"], fact_record, site_fact=fact, key=key, effective_at=fact.get("effective_at"))
+    present = {item["field"] for item in facts + nav_facts}
     for field in ["official_website", "business_description", "company_declared_profile", "job_posting", "company_news"]:
         if field not in present:
             record = website
@@ -267,6 +283,8 @@ def compile_claims(profile: dict[str, Any]) -> tuple[list[dict], list[dict]]:
                 partial = bool((website.get("value") or {}).get("crawl_errors"))
                 record = {**website, "status": "source_error" if partial else "not_found",
                           "note": "Relevant pages could not all be checked" if partial else "No supported fact found in the bounded website search; not proof of absence"}
+            if field == "job_posting" and nav and website.get("status") != "available":
+                record = nav
             emit(field, None, record)
     return claims, list(sources.values())
 
@@ -283,12 +301,58 @@ def summarize(claims: list[dict]) -> list[dict]:
             sentences.append({"text": qualifier + prefix + str(claim["value"]), "claim_ids": [claim["id"]]})
     revenue = [claim for claim in available if claim["field"] == "financials.revenue" and claim.get("freshness", "current") == "current"]
     if revenue:
-        claim = max(revenue, key=lambda item: str((item.get("reporting_period") or {}).get("tilDato", "")))
+        # Prefer legal-entity accounts when both entity and consolidated accounts
+        # are present; never compare different scopes as one company history.
+        entity_revenue = [item for item in revenue if item.get("account_scope") == "SELSKAP"]
+        claim = max(entity_revenue or revenue, key=lambda item: str((item.get("reporting_period") or {}).get("tilDato", "")))
         period = claim.get("reporting_period") or {}
-        currency = next((item for item in available if item["field"] == "financials.currency" and item.get("reporting_period") == period), None)
+        def matching_currency(revenue_claim):
+            matches = [item for item in available if item["field"] == "financials.currency"
+                       and item.get("reporting_period") == revenue_claim.get("reporting_period")
+                       and item.get("account_scope") == revenue_claim.get("account_scope")
+                       and item.get("freshness", "current") == "current"]
+            return matches[0] if matches and len({json.dumps(item["value"]) for item in matches}) == 1 else None
+        currency = matching_currency(claim)
         scope = claim.get("account_scope") or "reported accounts"
         sentences.append({"text": f"Filed revenue for {period.get('fraDato', '?')}–{period.get('tilDato', '?')}: {claim['value']} {currency['value'] if currency else '(currency unavailable)'}; scope: {scope}.",
                           "claim_ids": [claim["id"]] + ([currency["id"]] if currency else [])})
+        def finite_number(value):
+            return type(value) in {int, float} and math.isfinite(value)
+
+        def annual_dates(item):
+            try:
+                reporting = item.get("reporting_period") or {}
+                start = date.fromisoformat(reporting["fraDato"])
+                end = date.fromisoformat(reporting["tilDato"])
+                return (start, end) if 350 <= (end - start).days <= 366 else None
+            except (KeyError, ValueError, TypeError):
+                return None
+
+        latest_dates = annual_dates(claim)
+        if currency and latest_dates and finite_number(claim["value"]):
+            comparisons = []
+            for earlier in revenue:
+                dates = annual_dates(earlier)
+                if (not dates or earlier.get("account_scope") != claim.get("account_scope")
+                        or not finite_number(earlier["value"]) or earlier["value"] <= 0
+                        or dates[1].year != latest_dates[1].year - 1
+                        or (dates[0].month, dates[0].day, dates[1].month, dates[1].day)
+                        != (latest_dates[0].month, latest_dates[0].day, latest_dates[1].month, latest_dates[1].day)):
+                    continue
+                prior_currency = matching_currency(earlier)
+                if prior_currency and prior_currency["value"] == currency["value"]:
+                    comparisons.append((earlier, prior_currency))
+            # Duplicate/amended values for the same period need resolution before
+            # a derived comparison; do not silently select one version.
+            latest_values = {json.dumps(item["value"], sort_keys=True) for item in revenue if item.get("reporting_period") == period
+                             and item.get("account_scope") == claim.get("account_scope")}
+            if len(comparisons) == 1 and len(latest_values) == 1:
+                earlier, prior_currency = comparisons[0]
+                change = (claim["value"] - earlier["value"]) / earlier["value"] * 100
+                if math.isfinite(change):
+                    sentences.append({"text": f"Filed revenue changed {change:+.1f}% between the comparable annual periods ending {earlier['reporting_period']['tilDato']} and {period['tilDato']}; scope: {scope}. This is a calculation from filed accounts.",
+                                      "claim_ids": [earlier["id"], claim["id"], prior_currency["id"], currency["id"]],
+                                      "calculation": {"method": "(latest_revenue - prior_revenue) / prior_revenue * 100", "result_percent": round(change, 1)}})
     roles = by_field.get("roles")
     if roles and isinstance(roles["value"], list):
         leaders = [item for item in roles["value"] if not item.get("inactive") and item.get("role_code") in {"DAGL", "LEDE"} and item.get("name")]
@@ -299,6 +363,14 @@ def summarize(claims: list[dict]) -> list[dict]:
         matches = [claim for claim in available if claim["field"] == field and claim.get("freshness", "current") == "current"]
         if matches:
             sentences.append({"text": f"{label}: {len(matches)}.", "claim_ids": [claim["id"] for claim in matches]})
+            latest = max(matches, key=lambda claim: str(claim.get("effective_at") or ""))
+            item = latest["value"]
+            if isinstance(item, dict):
+                title = item.get("headline") or item.get("title")
+                observed = item.get("date_published") or item.get("date_posted")
+                if title and observed:
+                    prefix = "Latest captured company-authored article" if field == "company_news" else "Latest captured job posting"
+                    sentences.append({"text": f"{prefix}: {title} ({observed[:10]}).", "claim_ids": [latest["id"]]})
     unknown = [claim for claim in claims if claim["availability"] != "available" and claim["field"] in {"official_website", "job_posting", "company_news", "financials"}]
     if unknown:
         sentences.append({"text": "Unresolved information: " + ", ".join(f"{item['field']} ({item['availability']})" for item in unknown) + ".",
@@ -363,10 +435,29 @@ def merge_refresh(current: dict, previous: dict | None) -> dict:
     source_map = {item["id"]: item for item in current["evidence"]}
     previous_sources = {item["id"]: item for item in previous["evidence"]}
     changes = []
+    nav_ids = {claim_id for claim_id, claim in old_claims.items()
+               if claim["field"] == "job_posting" and any(
+                   previous_sources[source_id]["source_class"] == "official_job_feed"
+                   and previous_sources[source_id]["extraction_method"] == "nav_feed_exact_employer_v1"
+                   for source_id in claim["evidence_ids"])}
+    # NAV requires removal from display when active status is not confirmed.
+    # Keep a value-free claim and private evidence history, never a visible
+    # last-known advertisement during failed or incomplete source refresh.
+    for claim_id in nav_ids:
+        old = old_claims[claim_id]
+        if old["availability"] == "available" and new_claims.get(claim_id, {}).get("availability") != "available":
+            new_claims[claim_id] = {**old, "value": None, "availability": "not_available", "evidence_ids": [],
+                                   "freshness": "current", "note": "NAV active status not reconfirmed; removed from display"}
+            changes.append({"id": stable_id("change", "nav_not_reconfirmed", claim_id),
+                            "type": "not_reconfirmed", "claim_id": claim_id, "field": "job_posting",
+                            "source_policy": "nav_remove_from_display", "old_value": old["value"], "new_value": None,
+                            "old_evidence_ids": old["evidence_ids"], "new_evidence_ids": []})
+            for source_id in old["evidence_ids"]:
+                source_map[source_id] = previous_sources[source_id]
     for claim_id, claim in list(new_claims.items()):
         old = old_claims.get(claim_id)
         if claim["availability"] != "available":
-            if old and old["availability"] == "available":
+            if old and old["availability"] == "available" and claim_id not in nav_ids:
                 new_claims[claim_id] = {**old, "freshness": "last_known", "note": f"Refresh outcome: {claim['availability']}. {claim.get('note') or ''}".strip()}
                 for source_id in old["evidence_ids"]:
                     source_map[source_id] = previous_sources[source_id]

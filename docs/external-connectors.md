@@ -1,7 +1,13 @@
 # External discovery and sentiment
 
-External intelligence is now 55/100 in the revised competition rubric. Individual connectors remain
-quarantined until their data-rights and held-out gates pass; planned or experimental output earns zero.
+Current scoring-version-2 context: recall/coverage is **50/100**, not the legacy
+55-point statement below. The connector thresholds described in this historical
+design are internal validation targets, not additional organizer qualification
+bars. The current optional production-path implementation and provider
+research are in [search-provider-research.md](search-provider-research.md).
+
+Recall and coverage contribute 50/100 under scoring version 2. Planned connectors
+and synthetic results do not establish live coverage or an official score.
 
 ## Missing-website discovery
 
@@ -9,10 +15,13 @@ Use the [Brønnøysund entity registry](https://data.brreg.no/enhetsregisteret/a
 first. Its open data is available under [NLOD 2.0](https://data.norge.no/nlod/en/2.0). Search is only
 for an entity whose registry website is absent, invalid, or dead.
 
-Recommended production path: a separately contracted [Brave Search API](https://brave.com/search/api/)
-connector, provided its [terms](https://api-dashboard.search.brave.com/terms-of-service) and the chosen
-plan explicitly cover the required evidence retention. If permanent result storage is not permitted,
-keep provider output transient and retain only independently fetched page evidence after verification.
+The current first-test provider is authenticated Tavily Basic on its verified
+free allowance; see [current provider research](search-provider-research.md).
+Brave remains disabled pending plan/terms clarification. Keep provider output
+transient and retain independently fetched company-page evidence after verification.
+The optional production crawler also searches once after all registry/email
+candidates fail, within the same company request/deadline and shared spending
+limits. It does not retry an already attempted domain through this route.
 
 Two adapters are available, and neither scrapes a search-results page. `apply_search_discovery.py` accepts
 exported JSONL only for a plan with result-storage rights. `run_brave_discovery.py` is the default transient
@@ -22,10 +31,9 @@ still requires independently fetched proof of the exact legal entity.
 
 Do not use Google or Bing grounding output to build a stored crawl corpus. Google Custom Search JSON API
 is [closed to new customers and scheduled to discontinue on 1 January 2027](https://developers.google.com/custom-search/v1/overview).
-Serper and Tavily can be evaluated as declared alternatives only after their storage, source, and crawling
-rights are accepted for this use.
+Serper remains unused: upstream access rights have not been verified for this use.
 
-Production discovery gate:
+Historical proposed validation targets (not organizer requirements or measured results):
 
 - at least 500 frozen organisations, including at least 200 verified site-exists positives, 150 hard
   parent/franchise/ambiguous negatives, and 100 no-site or unresolved cases;

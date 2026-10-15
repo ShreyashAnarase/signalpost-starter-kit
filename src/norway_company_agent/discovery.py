@@ -12,6 +12,13 @@ BLOCKED_DISCOVERY_HOSTS = {
     "proff.no", "purehelp.no", "1881.no", "gulesider.no", "firmalisten.no", "companywall.no",
     "firmadatabasen.no", "sokfirma.no", "yra.no", "northdata.com", "nor47business.com",
     "linkedin.com", "facebook.com", "instagram.com", "x.com", "twitter.com", "youtube.com", "tiktok.com",
+    "brreg.no", "utdanning.no", "finn.no", "nav.no", "karrierestart.no", "jobbnorge.no",
+    "wikipedia.org", "wikidata.org", "glassdoor.com", "indeed.com",
+    "kredittsjekk.no", "nabonytt.no", "byndle.no", "1850.no", "1890.no", "infobel.no",
+    "haandverkerportalen.no", "handverkerportalen.no", "lokalebedrifter.no", "listings.no",
+    "firmview.no", "vexter.no", "vexter.ai", "fagfolkguiden.no", "io.no", "tracxn.com",
+    "mittboligprosjekt.no", "firmaportalen.no", "borettslagsportalen.no", "eiendomssjekk.no",
+    "vimeo.com", "dribbble.com", "google.com", "mittanbud.no", "regnskapsplassen.no",
 }
 GENERIC_NAME_TOKENS = {"as", "asa", "ans", "da", "enk", "sa", "nuf", "company", "norge", "norway", "gruppen", "group"}
 

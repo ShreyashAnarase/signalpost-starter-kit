@@ -1,0 +1,37 @@
+{
+  "boundary": "Synthetic development fixtures, not live companies or independently reviewed gold labels",
+  "retrieved_at": "2026-10-12T00:00:00Z",
+  "companies": [
+    {
+      "organisation_number": "123456789",
+      "name": "EXAMPLE NEWS AS",
+      "website": "https://news.example/",
+      "pages": {
+        "/": "<title>EXAMPLE NEWS AS</title><footer>Org.nr. 123456789</footer><a href='/nyheter'>Nyheter</a>",
+        "/nyheter": "<title>Nyheter</title><main><article><h2><a href='/a/42'>New production line</a></h2><time datetime='2026-10-01'>1 October</time></article><article><h2><a href='/a/43'>New warehouse</a></h2><time datetime='2026-10-02'>2 October</time></article></main><nav><a href='/unrelated'>Home</a></nav>",
+        "/a/42": "<title>New production line</title><article><h1>New production line</h1><time datetime='2026-10-01'>1 October</time><p>We opened a production line.</p></article>",
+        "/a/43": "<title>New warehouse</title><meta property='og:type' content='article'><meta property='article:published_time' content='2026-10-02'><main><h1>New warehouse</h1><p>We opened a warehouse.</p></main>"
+      }
+    },
+    {
+      "organisation_number": "987654321",
+      "name": "EXAMPLE JOBS AS",
+      "website": "https://jobs.example/",
+      "pages": {
+        "/": "<title>EXAMPLE JOBS AS</title><footer>Org.nr. 987654321</footer><a href='/karriere'>Karriere</a>",
+        "/karriere": "<title>Karriere</title><main><article><h2><a href='/positions/7'>Engineer</a></h2></article><article><h2><a href='/positions/8'>Other employer</a></h2></article></main>",
+        "/positions/7": "<title>Engineer</title><main><h1>Engineer</h1><time itemprop='datePosted' datetime='2026-10-03'>3 October</time><div itemprop='hiringOrganization'><span itemprop='legalName'>EXAMPLE JOBS AS</span></div><time itemprop='validThrough' datetime='2026-10-31'>31 October</time></main>",
+        "/positions/8": "<title>Other employer</title><main><h1>Other employer</h1><time itemprop='datePosted' datetime='2026-10-03'>3 October</time><div itemprop='hiringOrganization'><span itemprop='legalName'>UNRELATED AS</span></div></main>"
+      }
+    },
+    {
+      "organisation_number": "111222333",
+      "name": "UNRELATED OWNER AS",
+      "website": "https://conflict.example/",
+      "pages": {
+        "/": "<title>UNRELATED OWNER AS</title><footer>Org.nr. 999888777</footer><a href='/nyheter'>Nyheter</a>",
+        "/nyheter": "<article><h1>Wrong company</h1><time datetime='2026-10-01'>1 October</time></article>"
+      }
+    }
+  ]
+}

@@ -4,7 +4,7 @@ from __future__ import annotations
 import hashlib
 from pathlib import Path
 
-STRATEGY_VERSION = "free_sources_v2"
+STRATEGY_VERSION = "sources_v9_live_nav_ad_content_and_candidates"
 
 
 def source_fingerprint(root: Path) -> str:

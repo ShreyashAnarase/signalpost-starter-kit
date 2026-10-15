@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import re
 from typing import Any
 
 import extruct
@@ -39,6 +40,10 @@ def extract_page_event(
     if "html" not in content_type.casefold():
         return {**base, "status": "source_error", "error": f"Unsupported content type: {content_type}"}
     page_html, encoding = decode_html(body, content_type)
+    # Bytes have already been decoded according to their declared/detected
+    # charset. lxml rejects an XML encoding declaration in Unicode input.
+    # Drop only that leading parser directive; retain/hash the original bytes.
+    page_html = re.sub(r'^\ufeff?\s*<\?xml\b[^>]*\?>', '', page_html, count=1, flags=re.I)
     soup = BeautifulSoup(page_html, "lxml")
     text = trafilatura.extract(page_html, url=final_url, include_links=False, include_tables=False, favor_precision=True) or ""
     title = soup.title.get_text(" ", strip=True)[:500] if soup.title else ""
