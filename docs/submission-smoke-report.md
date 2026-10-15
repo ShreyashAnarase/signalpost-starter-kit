@@ -21,8 +21,13 @@ retained at `out/first-entry-20261015/smoke-100/`. Public aggregate measurements
 and provenance are in [submission-smoke-report.json](submission-smoke-report.json).
 Runtime source SHA-256: `b98393804c380ae1fbff62f7c4d7a97b42aa631e615f6e70701f4e08adcf5973`.
 
-The input is [the frozen 100-company development smoke](first-smoke-input.jsonl),
-not an official evaluator batch. Identity uses the frozen registry CSV with
+The acquisition used the full-row frozen local input (SHA-256
+`41d064e6c82e2e8c56627a4ecf51917c582ed629cc1b2ac38701e0fdd25a67a3`).
+[The public reproduction input](first-smoke-input.jsonl) contains the same ordered
+100 organisation numbers, SHA-256
+`4664ca34c48814851f1601a00a70f1d54aa988197677abd13d8d2f14da9464bb`.
+Optional name annotations are ignored by the evaluator. Neither is an official
+evaluation batch. Identity uses the frozen registry CSV with
 SHA-256 `511f437caeccc62aa75c3208b3eaa6db6f5f697cc4a4db70806796a754bc8fca`.
 The original separate holdout was not targeted. No missing financial value was
 silently converted to zero, and unverifiable websites/jobs remain explicit states.
